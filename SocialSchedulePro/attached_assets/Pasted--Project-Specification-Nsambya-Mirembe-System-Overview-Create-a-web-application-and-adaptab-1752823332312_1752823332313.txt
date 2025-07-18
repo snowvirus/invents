@@ -1,0 +1,415 @@
+🛠 Project Specification: Nsambya & Mirembe System
+🔰 Overview
+Create a web application (and adaptable to mobile) that manages two businesses:
+
+Nsambya Furniture Workshop
+
+Mirembe Beddings
+
+The system should include customer features, admin management, and a superadmin dashboard for the owner. All data is stored in a MySQL database. The system should also have a real-time group chatroom.
+
+📦 Technologies
+Frontend: React.js + Tailwind CSS / MUI
+
+Backend: Node.js + Express.js
+
+Database: MySQL
+
+Chat: Socket.io for real-time messaging
+
+Image Uploads: Can be base64 or handled via file upload and stored in backend (local or cloud storage)
+
+👥 User Roles
+1. Customer
+Can register and log in
+
+Can view all products
+
+Can filter products:
+
+By price range
+
+By quality (e.g., high, medium, low)
+
+By business (Nsambya or Mirembe)
+
+Can send product inquiries
+
+Can submit a custom order:
+
+Upload optional design/photo
+
+Specify description, preferred material, dimensions, etc.
+
+Can participate in the public chatroom
+
+2. Admin (per business)
+Can log in to manage assigned business (either Nsambya or Mirembe)
+
+Add/edit/delete products with:
+
+Price
+
+Description
+
+Stock level
+
+Quality tag
+
+Extras (e.g., for duvets: pillowcases, sandals, net, etc.)
+
+View customer orders & inquiries
+
+Reply to inquiries
+
+Moderate chat messages if needed
+
+3. SuperAdmin (Owner)
+Can manage both businesses
+
+Add/remove Admins
+
+View all customer orders, inquiries, and products
+
+Access analytics dashboard (optional)
+
+Full control over everything
+
+💳 Currency
+All prices and transactions are in Ugandan Shillings (UGX)
+
+🗂 MySQL Database Schema (high-level)
+users
+id
+
+name
+
+email
+
+password (hashed)
+
+role (customer, admin, superadmin)
+
+business (nullable for customer or superadmin)
+
+products
+id
+
+name
+
+description
+
+price
+
+quality
+
+extras (JSON or comma-separated string: e.g., "net,pillowcases")
+
+image_url
+
+business
+
+orders
+id
+
+user_id (FK)
+
+product_id (nullable)
+
+type (inquiry or custom)
+
+description
+
+image_url (nullable)
+
+status (pending, approved, completed)
+
+created_at
+
+messages
+id
+
+user_id
+
+message
+
+created_at
+
+🌐 API Endpoints (Express)
+Auth
+POST /api/auth/register
+
+POST /api/auth/login
+
+Products
+GET /api/products (all, with filters)
+
+POST /api/products (admin only)
+
+PUT /api/products/:id (admin only)
+
+DELETE /api/products/:id (admin only)
+
+Orders/Inquiries
+POST /api/orders/custom
+
+POST /api/orders/inquiry
+
+GET /api/orders/my (customer only)
+
+GET /api/orders (admin/superadmin)
+
+Chat
+GET /api/chat/messages
+
+WebSocket via Socket.io for real-time messaging
+
+Admin & SuperAdmin
+GET /api/admin/dashboard
+
+POST /api/admin/create (superadmin only)
+
+GET /api/admin/users (superadmin only)
+
+🧾 UI Routes (React)
+For Customer:
+/login, /register
+
+/home
+
+/products
+
+/products/:id
+
+/order/custom
+
+/inquiry
+
+/chatroom
+
+For Admin:
+/admin/login
+
+/admin/dashboard
+
+/admin/products
+
+/admin/orders
+
+/admin/chatroom
+
+For SuperAdmin:
+/superadmin/login
+
+/superadmin/dashboard
+
+/superadmin/admins
+
+/superadmin/overview
+
+💬 Chatroom Features
+All users (customers, admins, superadmin) can send and view messages in real time.
+
+Admins or superadmin can moderate (delete inappropriate messages).
+
+🧠 Notes
+Do not include any AI-related branding or signatures in the code.
+
+Code must be clean, well-organized, and easily expandable.
+
+Use environment variables for database and secret keys.
+
+Use proper error handling and input validation.
+
+Let me know if you want this turned into:
+
+Folder structure
+
+Full backend starter project
+
+Full React app scaffold
+
+Or even the Dockerfile or deployment instructions.
+
+Would you like to proceed with generating any of those?
+
+
+
+
+
+
+
+You said:
+ok. the business has many different business branches so the superadmin adds those branches and assign admin to work there and for admin when login the admin dashboard shows the name but all sees the same products and have the same chatroom though you can tag admin from a branch and when chatting. the admin will be showing branch name and their name and the customer must display there username. the superadmin will also chat in the chatroom and it will display their names. admin and superadmin can add the products and change the price
+
+
+ChatGPT said:
+Here is the updated system documentation you can feed to an AI (like Replit AI, Codeium, or GPT-based code generators) to generate the complete system code. It reflects all your latest requirements:
+
+🌍 System Title:
+Unified Business Management System for Nsambya Furniture Workshop & Mirembe Beddings
+
+👥 User Roles
+SuperAdmin (Business Owner)
+
+Adds and manages multiple branches.
+
+Assigns Admins to specific branches.
+
+Views and edits all products and prices.
+
+Participates in a shared real-time chatroom (with name displayed).
+
+Views orders, inquiries, and user activity across all branches.
+
+Admin (Branch Manager)
+
+Logs in and sees their branch name in the dashboard.
+
+Can add/edit products and set prices.
+
+Can respond to customer inquiries and orders.
+
+Participates in the shared real-time chatroom (displays branch + name).
+
+Sees the global product catalog.
+
+Customer
+
+Registers/logs in with a username.
+
+Browses all available products (shared catalog).
+
+Filters products by:
+
+Category
+
+Price
+
+Quality
+
+Tags or other metadata
+
+Can:
+
+Make standard orders.
+
+Submit a custom order with:
+
+Description of their design.
+
+Option to upload an image.
+
+Delivery location and details.
+
+Can send messages or inquiries through a shared real-time chatroom (displays username).
+
+💬 Chatroom Features
+One global real-time chatroom for all users.
+
+Supports tagging (@adminName, @branchName) to notify specific Admins.
+
+Messages are live and persistent (stored in database).
+
+Chat displays:
+
+For customers: username.
+
+For Admins: branch name + admin name.
+
+For SuperAdmin: name as SuperAdmin.
+
+🛍 Product Management
+Admins and SuperAdmins can:
+
+Add products with custom fields, e.g.:
+
+Product: Duvet
+
+Add-ons: Sandals, Pillowcases, Net, etc.
+
+Set product price, description, quality, tags.
+
+Products are visible to all customers.
+
+Customers can filter based on quality, price, tags.
+
+📦 Order Flow
+Customer selects or customizes product.
+
+Enters delivery location and notes.
+
+Admins get notified.
+
+Order tracked by SuperAdmin and Admin.
+
+🏢 Branch Management (SuperAdmin)
+Adds new branches (e.g., Kampala, Kiboga).
+
+Assigns Admins to branches.
+
+Dashboard shows branch list and statistics.
+
+💾 Database: MySQL (Relational)
+Tables:
+
+users (id, name, email, password, role, branch_id)
+
+branches (id, name, location)
+
+products (id, name, price, quality, tags, description, options)
+
+custom_orders (id, user_id, description, image_url, location, status)
+
+orders (id, user_id, product_id, location, status)
+
+messages (id, sender_id, sender_role, message, timestamp)
+
+product_options (id, product_id, name, value)
+
+🧭 Frontend Pages (React)
+/login – For all roles.
+
+/register – Customer registration.
+
+/dashboard/admin – Admin dashboard (products, orders, chat).
+
+/dashboard/superadmin – SuperAdmin dashboard (branches, admins, all products/orders/chat).
+
+/products – Product listing and filtering.
+
+/inquiry – Inquiry form and chat access.
+
+/custom-order – Custom order form with file upload and location.
+
+/chatroom – Real-time chat UI.
+
+⚙️ Tech Stack
+Frontend: React + Tailwind + Axios
+
+Backend: Node.js + Express
+
+Database: MySQL
+
+Real-time Chat: Socket.IO
+
+File Uploads: Multer (for custom order images)
+
+Hosting: Any (Replit / Railway / Render)
+
+🧠 Notes for AI Code Generator
+✅ Do:
+
+Keep code clean with folders like /routes, /controllers, /models, /utils, /pages.
+
+Generate the MySQL schema and migration scripts.
+
+Use .env for secrets.
+
+Include comments but do not reference AI, Replit, or any AI tool used.
+
+🚫 Don’t:
+
+Include AI branding or credits.
+
+Leave unused imports or generated placeholder junk.
